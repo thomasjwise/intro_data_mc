@@ -1,0 +1,258 @@
+---
+title: "Data in R"
+subtitle: "An Introduction to Data Manipulation and Cleaning in R"
+author: "Thomas Wise"
+output: 
+  ioslides_presentation:
+  incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+```
+
+## Session Objectives and Transferable Skills
+
+<div style = "float: left; width: 50%;">
+- To understand the importance of data manipulation and cleaning for good data analytic practices.
+- To understand how to **select**, **manipulate** and **transform** data under both standardized and conditional situation.
+- To understand how to **clean** data through identifying or removing missing observations. 
+
+</div>
+<div style = "float: left; width: 50%;">
+- Data Summarization, using *summary()*,
+- Data Manipulation, changing data types, transforming and mutating data,
+- Data Selection, based on static or conditional situations,
+- Data Cleaning, through identification, removal and replacement of missing observations,
+
+</div>
+
+## Schedule 
+
+<font size="4">
+Introduction (5 minutes)
+
+Part 1: (40 minutes)
+
+  - Introduction to Data & Big Data (Theory)
+  - Data Loading, Viewing & Summaries (Practical, Section 1)
+  - Introduction to Data Types and Missing data (Theory)
+  - Data Manipulation 1: Changing Data Types (Practical, Section 2)
+  - Missing Values: Identification and Removal (Practical, Section 3)
+
+Break (5 minutes)
+
+Part 2: (35 minutes)
+
+  - Introduction to Selection of Variables (Theory)
+  - Selection of Variables and Observations (Practical, Section 4)
+  - Manipulation through Mutation and Transformation (Theory)
+  - Data Manipulation 2: Mutation & Transformation (Practical, Section 5) 
+    
+Review and Conclusion (5 minutes)
+</font>
+
+## Introduction
+
+- "House Rules" 
+- Who am I?
+
+- Contact Me 
+  - Find me online: thomasjwise.com 
+  - Email me: thomas.j.wise@outlook.com
+  - Connect with me: www.linkedin.com/in/tjwise213/
+  - Follow me: @thomasj_wise
+
+# Part 1
+
+## Intro to Data 
+
+- Single or Multiple variables, providing insight for qualitative or quantitative purposes. 
+
+- Prior to analysis, raw data must be cleaned and manipulated into a usable format! 
+
+## Big Data & Society
+
+- Active Data Generation 
+  - Company/Product Reviews 
+  - Company & Organisation subscriptions 
+
+- Passive Data Generation 
+  - Terms of Service Collection (Facebook, Google Maps)
+  - Location based information (Check ins, CCTV) 
+  
+- Through manipulation, merging and cleaning of this data, analyses can be run to help understand how society operates. 
+
+## Data Loading 
+
+  - *tidyverse* package: **readr**
+  - Additional packages: **readxl**, **haven**, **xml2**
+  - csv files: *read_csv()*
+  - delim files (those without delimiters): *read_delim()*
+  - Excel Spreadsheets: *read_excel()*, *read_xls()*, *read_xlsx*
+  - SAS Data Files: *read_sas()*
+  - SPSS Data Files: *read_sav()*, *read_spss()*
+  - Stata Data Files: *read_stata()*
+  - Unsure about how to load in a data type? Check it on Google!
+  - You prefix any function with **?** to bring up the help menu and see what additional parameters can be used!
+
+## Data Viewing & Summaries 
+
+Once loaded, you can view the data in multiple ways. 
+
+  - **view()** - Views the entire data set in a Tab
+  - **head()** - View the first six observations 
+  - **tails()** - View the last six observations 
+  - **names()** / **colnames()** - View the column names of the data set 
+  - **str()** - View the data set's structure
+
+## Data Types 
+
+  - Numeric: *1, 2, 3*, can present as "double"
+  - Character: *"one", "two", "three"*
+  - Logical: *"TRUE", "FALSE"*
+  - Factors: Nominal Variables
+  - Vector: A string of elements
+  - Matrix: A multiple vectors, formed into columns and rows, which share the same data type
+  - Arrays: Similar to matrices, but with more than 2 dimensions
+  - Data Frames: Multiple vectors, formed into columns and rows, each column indicates a different variable, each row a different observation
+  - List: An ordered collection of objects, can be a merge of one type or many different ones. 
+
+## Data Types
+
+- Conversion Functions
+
+  - To Numeric: **as.numeric()**
+  - To Integer: **as.integer()**
+  - To Character: **as.character()**
+  - To Logical: **as.logical()**
+  - To Factor: **as.factor()**
+
+- These will work in **most** cases, but do look up additional information regarding dates (**as.date()**), as well as data structures (matrices, data frames etc) as these can be more complex! 
+
+## Missing Data: Identification 
+
+Missing values are *typically* represented by **NA**. 
+  How to identify the number of NAs per variable (column)
+  
+  - Using *summary()*
+  - Using *sum(is.na())*
+  - Using *table(is.na())*
+  
+  How to identify the number of NAs per observation (row)
+  
+  - Using *rowSums(is.na())*
+  
+## Handling Missing Data
+
+Handling Missing Data is a highly debated topic, you can choose to: 
+  
+  - Exclude the value: Removal 
+  - Impute the value: Mean, Median or Predicted Value (through regression or other analysis)
+  
+For today's introduction we will focus on Removal, with an extension for those interested in Replacement online, as this combines knowledge from all of today's sections.
+
+## Missing Data: Removal 
+
+To remove missing values from individual variables, the entire observation (row) of that missing value must be removed. 
+  This can be done by: 
+  
+  - Using *na.omit()*
+  - Using *complete.cases()*
+  
+You can also remove observation which surpass a threshold of missingness (for example 50% missing values), this however will be covered later! 
+
+# Break 
+
+# Part 2
+
+## Selecting Data in R
+
+When manipulating data you may want to: 
+  
+  - Select a specific Column(s)
+  - Select a specific observation 
+  - Select a specific group of observations 
+  - Select observations which meet specific conditional requirements
+
+## Selecting Variables 1: Selecting Columns (Basic)
+
+When selecting a variables (columns) you can: 
+
+  - Name the column specifically: *WBD_1999$ed.year* or *WBD_1999[,"ed.years"]*
+  - Specify a range of columns by name: *WBD_1999[,c("ed.years", "lit.rate.per")]*
+  - Specify the column by number: *WBD_1999[,15]* (selecting ed.years)
+  - Specify a continuous range of columns by number: *WBD_1999[,15:16]* (selecting ed.year & labour)
+  - Specify a range of columns by number: *WBD_1999[,c(15,17)]* (selecting: ed.year & lit.rate.per)
+  - Specify complement set of variables (everything but): *WBD_1999[,!1]*
+
+## Selecting Variables 2: Selecting Columns (Advanced)
+
+If you are unsure of the exact names, column numbers or have too many to count/list. BUT know that all contain, are prefixed or suffixed with something you can use: 
+
+  - First, use *select()* function with: 
+  - Starts with, prefixed with: *starts_with()*
+  - Ends with, suffixed by: *ends_with()*
+  - Contains: *contains()*
+  - Exactly Matches: *matches()*
+  - Contains a numerical range: *num_range()*
+
+## Selecting Observations 1: Static Selection 
+
+When selecting observations, you can similarly: 
+
+  - Select a row by number or position: *WBD_1999[1,]* (selects the first row)
+  - Select multiple rows by position: *WBD_1999[c(1,3,5),]* 
+  - Select continuous rows by position: *WBD_1999[1:5,]*
+
+## Selecting Observations 2: Conditional Selection
+
+You can also select observations based upon pre-determined conditions, 
+  
+  For example, all those countries who's *ed.year* are equal or above 10
+  
+  This can be achieved through: 
+  
+  - Using the *filter()* function: *filter(WBD_1999, ed.years >= 10)*
+  - Using the *subset()* function: *subset(WBD_1999, WBD_1999[,15] >= 10)*
+  - Using raw base R functions: *WBD_1999[WBD_1999$ed.years > 10,]*
+
+## Selecting Observations 2: Selecting Operators 
+
+  - **==** is exactly equal to
+  - **>** is greater than
+  - **<** is less than
+  - **>=** is greater than or equal to
+  - **<=** is less than or equal to
+  - **!=** is not equal to
+  - **&** union (and)
+  - **|** or
+
+## Transforming and Mutating Data 
+
+Transformations and Mutations of Data are achieved through the *mutate()* function
+
+How to structure *mutate()*, with an example lets calculate the GDP per person
+
+  - WBD_1999 <- mutate(WBD_1999, GDP_PP = gdp / Pop)
+  
+## Useful Mutate Functions
+
+  - Mathematical Functions **(+, -, /, log())**
+  - Summary Functions **(mean(), median(), sd())**
+  - Conditional Functions **(if_else(), recode())**
+  - Cumulative Functions **(cumsum(), cummean(), etc)**
+  - Rank Functions **(dense_rank(), row_number(), cume_dist())**
+  
+## Section 6 & Extension Topics 
+
+  - Section 6: Bringing everything together, will develop your skills from today's session
+  - Check online for additional extension topic: Replacing Missing Values
+
+## Questions, Comments and More
+
+- Find me online: thomasjwise.com 
+- Email me: thomas.j.wise@outlook.com
+- Connect with me: www.linkedin.com/in/tjwise213/
+- Follow me: @thomasj_wise
